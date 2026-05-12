@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Housekeeping SOP - Torridonia</title>
+<style>
+:root{--c-bg1:#fff;--c-bg2:#f8f7f4;--c-bg3:#f1efe8;--c-info-bg:#e6f1fb;--c-success-bg:#eaf3de;--c-warn-bg:#faeeda;--c-text1:#1a1a19;--c-text2:#5f5e5a;--c-text3:#888780;--c-info:#185fa5;--c-success:#3b6d11;--c-warn:#854f0b;--c-border3:rgba(61,61,58,.15);--c-border2:rgba(61,61,58,.3);--c-info-border:#85b7eb;--c-success-border:#97c459;--c-warn-border:#ef9f27;--radius-md:8px;--radius-lg:12px}
+@media (prefers-color-scheme:dark){:root{--c-bg1:#1a1a19;--c-bg2:#2c2c2a;--c-bg3:#3d3d3a;--c-info-bg:#0c447c;--c-success-bg:#27500a;--c-warn-bg:#633806;--c-text1:#f8f7f4;--c-text2:#b4b2a9;--c-text3:#888780;--c-info:#b5d4f4;--c-success:#c0dd97;--c-warn:#fac775;--c-border3:rgba(248,247,244,.15);--c-border2:rgba(248,247,244,.3);--c-info-border:#378add;--c-success-border:#639922;--c-warn-border:#ba7517}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;background:var(--c-bg3);color:var(--c-text1);line-height:1.5}
+.container{max-width:640px;margin:0 auto}
+.header{position:sticky;top:4px;background:var(--c-bg1);padding:1rem;z-index:9;border-bottom:.5px solid var(--c-border3)}
+.title-section{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.main-title{font-size:18px;font-weight:500}
+.reset-btn{padding:6px 12px;font-size:12px;color:var(--c-text2);background:0 0;border:.5px solid var(--c-border2);border-radius:var(--radius-md);cursor:pointer;transition:.15s}
+.reset-btn:hover{background:var(--c-bg2);color:var(--c-text1)}
+.stats{display:flex;gap:8px;font-size:12px;color:var(--c-text2)}
+.stat{display:flex;align-items:center;gap:4px}
+.progress-bar{position:sticky;top:0;height:4px;background:var(--c-bg2);border-radius:2px;overflow:hidden;z-index:10}
+.progress-fill{height:100%;background:var(--c-success-bg);transition:width .3s}
+.timeline{display:flex;flex-direction:column;gap:1rem;padding:1rem}
+.phase{background:var(--c-bg1);border:.5px solid var(--c-border3);border-radius:var(--radius-lg);overflow:hidden}
+.phase-header{padding:1rem 1.25rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;transition:background .15s}
+.phase-header:hover{background:var(--c-bg2)}
+.phase-time{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;padding:4px 10px;border-radius:var(--radius-md);background:var(--c-info-bg);color:var(--c-info)}
+.phase-title{font-size:16px;font-weight:500;margin-top:4px}
+.phase-icon{font-size:20px;color:var(--c-text2);transition:transform .2s}
+.phase.expanded .phase-icon{transform:rotate(180deg)}
+.phase-content{max-height:0;overflow:hidden;transition:max-height .3s;border-top:.5px solid var(--c-border3)}
+.phase.expanded .phase-content{max-height:4500px}
+.content-inner{padding:1rem 1.25rem}
+.checklist{display:flex;flex-direction:column;gap:12px}
+.checklist-item{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:var(--radius-md);background:var(--c-bg2);cursor:pointer;transition:background .15s}
+.checklist-item:active{background:var(--c-border3)}
+.checkbox{width:20px;height:20px;min-width:20px;border:1.5px solid var(--c-border2);border-radius:4px;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s}
+.checklist-item.done .checkbox{background:var(--c-success-bg);border-color:var(--c-success-border)}
+.checkbox::after{content:"✓";font-size:14px;color:var(--c-success);opacity:0;transition:opacity .2s}
+.checklist-item.done .checkbox::after{opacity:1}
+.item-text{flex:1;font-size:14px;line-height:1.5}
+.checklist-item.done .item-text{color:var(--c-text2);text-decoration:line-through}
+.alert{margin-top:1rem;padding:12px;border-radius:var(--radius-md);background:var(--c-warn-bg);border-left:3px solid var(--c-warn-border);font-size:13px;color:var(--c-warn);line-height:1.5}
+.capacity-note{margin-top:1rem;padding:10px 12px;border-radius:var(--radius-md);background:var(--c-info-bg);font-size:12px;color:var(--c-info);line-height:1.5}
+.recipe-section{margin-top:1rem;padding:12px;border-radius:var(--radius-md);border:.5px solid var(--c-border3);background:var(--c-bg2)}
+.recipe-title{font-size:13px;font-weight:500;margin-bottom:8px}
+.recipe-list{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--c-text2);line-height:1.5}
+.recipe-list li{list-style:none;padding-left:18px;position:relative}
+.recipe-list li::before{content:"•";position:absolute;left:4px;color:var(--c-text3)}
+.color-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;margin-right:6px}
+.green-cloth{background:#dcfce7;color:#166534}
+.blue-cloth{background:#dbeafe;color:#1e40af}
+.pink-cloth{background:#fce7f3;color:#9f1239}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="title-section">
+<h1 class="main-title">Housekeeping SOP (B&B Rooms)</h1>
+<button class="reset-btn" onclick="resetProgress()">Reset</button>
+</div>
+<div class="stats">
+<span class="stat">✓ <span id="completed">0</span>/22 tasks</span>
+<span class="stat">⏰ Ready by 4 PM</span>
+</div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div class="timeline">
+
+<div class="alert">
+<strong>⏰ Deadline:</strong> All rooms must be ready by 4:00 PM. Guests check out by 10:00 AM. Check <a href="https://docs.google.com/spreadsheets/d/1tLqiJkRRXXwccjC_4ciQMUbRGKulzB2IzoHUE9eb54M/edit?usp=sharing" target="_blank" style="color: inherit; text-decoration: underline;">Live Rota</a> for room assignments. Leave key in the lock when finished.
+</div>
+
+<div class="phase" data-phase="1">
+<div class="phase-header" onclick="togglePhase(1)">
+<div>
+<div class="phase-time">🛏️ Step 1</div>
+<div class="phase-title">Beds & linens</div>
+</div>
+<span class="phase-icon">▼</span>
+</div>
+<div class="phase-content">
+<div class="content-inner">
+<div class="checklist">
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Remove used sheets and pillowcases from bed</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Put dirty linens in the laundry basket</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Get fresh linen from cupboard (up brown stairs, first door right)</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Make bed with fresh sheets and pillowcases</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Place one big towel + one small towel per person on top of cover</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Ensure extra blankets are neatly folded at foot of bed</div></div>
+</div>
+
+<div class="capacity-note">
+🗄️ <strong>Linen Location:</strong> Up brown stairs, first door to the right. Big towels (wardrobe right), small towels (wardrobe left), bath mats & tablecloths (lower left). Always refill cupboards after taking items.
+</div>
+</div>
+</div>
+</div>
+
+<div class="phase" data-phase="2">
+<div class="phase-header" onclick="togglePhase(2)">
+<div>
+<div class="phase-time">🧹 Step 2</div>
+<div class="phase-title">Room cleaning</div>
+</div>
+<span class="phase-icon">▼</span>
+</div>
+<div class="phase-content">
+<div class="content-inner">
+
+<div class="recipe-section">
+<div class="recipe-title">Colour-coded cleaning system</div>
+<ul class="recipe-list">
+<li><span class="color-badge green-cloth">●</span><strong>Green:</strong> General surfaces (furniture, windowsills, tables)</li>
+<li><span class="color-badge blue-cloth">●</span><strong>Blue:</strong> Glass, mirrors, windows</li>
+<li><span class="color-badge pink-cloth">●</span><strong>Pink:</strong> Toilets only</li>
+</ul>
+</div>
+
+<div class="checklist">
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Hoover entire bedroom floor thoroughly</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Dust all surfaces with green cloth (furniture, windowsills, shelves)</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Clear table of dishes → take to breakfast kitchen and clean</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Set up table for new guests: cups, saucers, teaspoons, glasses, serviettes</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Empty bin if full, replace with new bin bag</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Open window briefly to air out the room</div></div>
+</div>
+
+<div class="capacity-note">
+🧽 <strong>Cleaning supplies:</strong> Multi-purpose cleaner, glass cleaner, air freshener, Viakal disinfectant, toilet cleaner. All stored in upstairs cleaning cupboard (up brown stairs, turn left, first door).
+</div>
+
+</div>
+</div>
+</div>
+
+<div class="phase" data-phase="3">
+<div class="phase-header" onclick="togglePhase(3)">
+<div>
+<div class="phase-time">🚿 Step 3</div>
+<div class="phase-title">Bathroom deep clean</div>
+</div>
+<span class="phase-icon">▼</span>
+</div>
+<div class="phase-content">
+<div class="content-inner">
+<div class="checklist">
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Clean all surfaces with green cloth (sink, counters, shelves)</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Clean mirrors and windows with blue cloth</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Clean toilet thoroughly with pink cloth and toilet cleaner</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Check floor for hair/dust, wipe down if needed</div></div>
+</div>
+
+<div class="alert">
+<strong>⚠️ Never cross-contaminate:</strong> Pink cloth is ONLY for toilets. Green for general surfaces. Blue for glass/mirrors. Store them separately after cleaning.
+</div>
+
+</div>
+</div>
+</div>
+
+<div class="phase" data-phase="4">
+<div class="phase-header" onclick="togglePhase(4)">
+<div>
+<div class="phase-time">🧴 Step 4</div>
+<div class="phase-title">Amenities & final checks</div>
+</div>
+<span class="phase-icon">▼</span>
+</div>
+<div class="phase-content">
+<div class="content-inner">
+<div class="checklist">
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Refill hand soap if half empty (refillers in cleaning cupboard/storage)</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Check body wash/conditioner levels, refill if needed</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Replace toilet roll if halfway used (put used one in staff bathrooms)</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Place fresh bath mat on floor</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Restock tissues if box is low</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Double-check: bed made, towels placed, bathroom floor clean</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Leave room key in the lock</div></div>
+<div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="item-text">Return all cleaning tools to cupboard</div></div>
+</div>
+
+<div class="capacity-note">
+✅ <strong>Quick final checklist:</strong> Bed? Towels? Table set? Bathroom? Bin? Key in lock? If yes to all, room is ready!
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+const K='torridonia_housekeeping_progress';
+function load(){const s=localStorage.getItem(K);if(s){try{const d=JSON.parse(s);d.expanded.forEach(p=>{const e=document.querySelector('[data-phase="'+p+'"]');if(e)e.classList.add('expanded')});d.checked.forEach(i=>{const items=document.querySelectorAll('.checklist-item');if(items[i])items[i].classList.add('done')});update()}catch(e){}}}
+function save(){const exp=Array.from(document.querySelectorAll('.phase.expanded')).map(p=>p.dataset.phase);const items=document.querySelectorAll('.checklist-item');const chk=Array.from(items).map((item,i)=>item.classList.contains('done')?i:-1).filter(i=>i>=0);localStorage.setItem(K,JSON.stringify({expanded:exp,checked:chk}))}
+function togglePhase(n){document.querySelector('[data-phase="'+n+'"]').classList.toggle('expanded');save()}
+function toggleCheck(item){item.classList.toggle('done');update();save()}
+function update(){const t=document.querySelectorAll('.checklist-item').length;const d=document.querySelectorAll('.checklist-item.done').length;document.getElementById('completed').textContent=d;document.getElementById('progress').style.width=(d/t*100).toFixed(0)+'%'}
+function resetProgress(){if(confirm('Reset all progress? This cannot be undone.')){localStorage.removeItem(K);document.querySelectorAll('.checklist-item').forEach(i=>i.classList.remove('done'));document.querySelectorAll('.phase').forEach(p=>p.classList.remove('expanded'));update()}}
+load();update();
+</script>
+</body>
+</html>
